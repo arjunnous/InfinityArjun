@@ -1,0 +1,571 @@
+[
+  {
+    "id": 17461,
+    "title": "Verify audit log returns business-readable change labels for full rule lifecycle",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call GET /rules/{ruleId}/audit and validate every returned entry has change_type and business-readable change_type_description.",
+        "expected": "Response is 200 OK. Each audit row contains the expected AC label and does not expose only the raw enum value."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Audit",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17462,
+    "title": "Verify audit endpoint rejects unauthenticated request",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET audit request without token.",
+        "expected": "Response is 401 Unauthorized and no audit details are returned."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Security"
+    ]
+  },
+  {
+    "id": 17463,
+    "title": "Verify audit endpoint enforces tenant isolation for rule audit logs",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call GET audit for a rule owned by another tenant using a different tenant token.",
+        "expected": "Response is 404 Not Found or equivalent tenant-scoped not visible response. No other tenant audit data is returned."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Security"
+    ]
+  },
+  {
+    "id": 17464,
+    "title": "Verify CSV audit export contains change_type_description column and business labels",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Request CSV export and inspect header row and body rows.",
+        "expected": "Response is 200 OK with text/csv content type. CSV includes change_type_description column and business labels."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Export",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17465,
+    "title": "Verify PDF audit export returns a valid PDF file",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Request PDF export and validate response headers and file structure.",
+        "expected": "Response is 200 OK with application/pdf content type and non-empty PDF payload."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Export",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17466,
+    "title": "Verify Excel audit export returns a valid XLSX file",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Request Excel audit export and validate workbook can be opened and has expected audit columns.",
+        "expected": "Response is 200 OK with XLSX content type and workbook contains audit rows with business labels."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Export",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17467,
+    "title": "Verify JSON audit export matches audit response schema",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Request JSON export and compare key fields with GET audit schema.",
+        "expected": "Response is 200 OK with application/json content type and array of audit log objects."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Export",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17468,
+    "title": "Verify audit export rejects invalid format parameter",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call export using an unsupported format value.",
+        "expected": "Response is 400 Bad Request with invalid export format error."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Validation"
+    ]
+  },
+  {
+    "id": 17469,
+    "title": "Verify audit export supports valid date range filtering",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Request JSON export with from_date and to_date and validate changed_at values.",
+        "expected": "Response is 200 OK and all exported rows have changed_at within the inclusive date range."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Export",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17470,
+    "title": "Verify audit export rejects invalid date range",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call export with from_date later than to_date.",
+        "expected": "Response is 400 Bad Request with invalid date range error."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Validation"
+    ]
+  },
+  {
+    "id": 17471,
+    "title": "Verify version history returns snapshots in ascending version order",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call GET /versions and inspect the sequence of version_number values.",
+        "expected": "Response is 200 OK and versions are ordered from lowest to highest version_number."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Version"
+    ]
+  },
+  {
+    "id": 17472,
+    "title": "Verify specific version snapshot returns complete snapshot fields",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call GET /versions/{versionNumber} and validate required response fields.",
+        "expected": "Response is 200 OK and snapshot fields match the stored version data."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Version"
+    ]
+  },
+  {
+    "id": 17473,
+    "title": "Verify missing version number returns not found",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call GET specific version using a version number that does not exist for the rule.",
+        "expected": "Response is 404 Not Found with VERSION_NOT_FOUND detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Version"
+    ]
+  },
+  {
+    "id": 17474,
+    "title": "Verify compare versions returns field-level differences",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Compare two different versions and validate differences array.",
+        "expected": "Response is 200 OK. differences contains each changed field with values for both versions and accurate difference_count."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Version"
+    ]
+  },
+  {
+    "id": 17475,
+    "title": "Verify compare same version returns no differences",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call compare with the same version number for both query params.",
+        "expected": "Response is 200 OK with differences=[] and difference_count=0."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Version"
+    ]
+  },
+  {
+    "id": 17476,
+    "title": "Verify compare endpoint rejects missing query parameters",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call compare endpoint with one required query parameter missing.",
+        "expected": "Response is 400 Bad Request with compare parameter required validation."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Validation"
+    ]
+  },
+  {
+    "id": 17477,
+    "title": "Verify compare endpoint handles reversed version order",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Compare versions using reversed order and validate response consistency.",
+        "expected": "Response is 200 OK. version_a/version_b reflect requested versions or normalized ordering as documented, and differences are accurate."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Version"
+    ]
+  },
+  {
+    "id": 17478,
+    "title": "Verify rollback to prior version creates a new version without overwriting history",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit rollback request and then query version history.",
+        "expected": "Response is 200 OK. New version_number equals previous max+1, content matches target version, prior versions remain queryable."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Rollback"
+    ]
+  },
+  {
+    "id": 17479,
+    "title": "Verify rollback creates RolledBack audit log with business reason",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Query audit log after rollback and locate latest RolledBack entry.",
+        "expected": "Response is 200 OK and audit entry includes change_type_description=Rolled Back to Prior Version and the provided business_reason."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Audit",
+      "Functional",
+      "Rollback"
+    ]
+  },
+  {
+    "id": 17480,
+    "title": "Verify rollback is blocked when rule is active",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Attempt rollback on an Active rule.",
+        "expected": "Response is 422 Unprocessable Entity with CANNOT_ROLLBACK_ACTIVE_RULE. No new version or rollback audit entry is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Rollback"
+    ]
+  },
+  {
+    "id": 17481,
+    "title": "Verify rollback rejects nonexistent target version",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit rollback using a target version that does not exist.",
+        "expected": "Response is 422 Unprocessable Entity with VERSION_NOT_FOUND and no new version is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Rollback"
+    ]
+  },
+  {
+    "id": 17482,
+    "title": "Verify rollback rejects empty business reason",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit rollback request with empty business_reason.",
+        "expected": "Response is 400 Bad Request with BUSINESS_REASON_REQUIRED validation."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Validation"
+    ]
+  },
+  {
+    "id": 17483,
+    "title": "Verify rollback rejects business reason over 1000 characters",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit rollback request with a business reason longer than allowed.",
+        "expected": "Response is 400 Bad Request with BUSINESS_REASON_TOO_LONG validation."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Validation"
+    ]
+  },
+  {
+    "id": 17484,
+    "title": "Verify rollback requires rule.manage policy",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Attempt rollback using a token that has only monitor/read permission.",
+        "expected": "Response is 403 Forbidden and no new version or audit entry is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Rollback",
+      "Security"
+    ]
+  },
+  {
+    "id": 17485,
+    "title": "Verify rollback rejects invalid target version number zero or negative",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit rollback request with zero or negative target_version_number.",
+        "expected": "Response is 400 Bad Request with INVALID_VERSION_NUMBER validation."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Validation"
+    ]
+  },
+  {
+    "id": 17486,
+    "title": "Verify audit and version resources are immutable through API surface",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Review Swagger/OpenAPI paths for audit and version snapshot endpoints.",
+        "expected": "No API endpoint supports updating or deleting audit entries or version snapshots. Any direct attempt returns 404/405."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Audit",
+      "Security"
+    ]
+  },
+  {
+    "id": 17487,
+    "title": "Verify duplicate version snapshot is not allowed by unique constraint",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Attempt duplicate snapshot creation for an existing rule version.",
+        "expected": "Duplicate snapshot is rejected by service or database unique constraint; existing snapshot remains unchanged."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Data Integrity"
+    ]
+  },
+  {
+    "id": 17488,
+    "title": "Verify export with no audit results returns valid empty file response",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Request audit export for a valid rule/date range with no matching audit rows.",
+        "expected": "Response is 200 OK with an empty JSON array or valid file containing headers only, depending on selected format."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Export",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17489,
+    "title": "Verify audit export performance for regulatory-sized audit history",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Request CSV export for a rule with large audit history and measure response time.",
+        "expected": "Response is 200 OK and completes within the agreed SLA; CSV remains well-formed."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Non Functional",
+      "Performance"
+    ]
+  },
+  {
+    "id": 17490,
+    "title": "Verify audit and version endpoints return 404 for unknown rule identifier",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call version or audit endpoint using a syntactically valid but nonexistent rule identifier.",
+        "expected": "Response is 404 Not Found with RULE_NOT_FOUND detail and no audit/version data is returned."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Audit",
+      "Negative",
+      "Version"
+    ]
+  }
+]

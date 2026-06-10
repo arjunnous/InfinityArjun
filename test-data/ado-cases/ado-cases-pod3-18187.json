@@ -1,0 +1,543 @@
+[
+  {
+    "id": 18201,
+    "title": "Verify calculate premium returns 201 with complete pricing response",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit a valid calculate request using parameterized policy, coverage, product, jurisdiction, transaction type, effective date, and pricing inputs.",
+        "expected": "<P>Response is 201 Created and includes result_id,  policy_id, coverage_code, product_code, jurisdiction_code, transaction_type, effective_date, base_premium, total_modifiers, total_fees, final_premium, calculation_version, line_items, and created_at.</P>"
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18202,
+    "title": "Verify base premium equals sum of RATE_ base premium line items",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request and sum all line_items where item_type=BasePremium or rule_code starts with RATE_.",
+        "expected": "Response base_premium equals the summed RATE_ line item amounts with decimal precision maintained."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18203,
+    "title": "Verify rule code prefixes map to correct pricing line item types",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request that triggers multiple pricing rule prefixes and inspect line_items.",
+        "expected": "Each line item has the correct item_type based on rule_code prefix; unmapped or incorrect item type is not returned."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18204,
+    "title": "Verify modifiers are applied in ascending sequence_order",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request and verify Modifier/Discount/Surcharge line items are ordered by sequence_order.",
+        "expected": "Modifier-related line_items are returned/applied in ascending sequence_order and final_premium reflects that order."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18205,
+    "title": "Verify identical inputs produce deterministic premium result and line item order",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send two calculate requests with identical inputs and compare final_premium, base_premium, total_modifiers, total_fees, and sequence_order values.",
+        "expected": "Both responses have identical premium totals and identical ordering of applied pricing line items."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Non Functional"
+    ]
+  },
+  {
+    "id": 18206,
+    "title": "Verify final premium formula uses base premium, net modifier effect, fees, and taxes",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request and independently compute expected final premium from response line items.",
+        "expected": "Response final_premium equals calculated value from base_premium, total_modifiers/net modifier effect, and total_fees within allowed decimal precision."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18207,
+    "title": "Verify fees and taxes are added after modifier application",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request and compare total_fees with sum of Fee and Tax line items.",
+        "expected": "total_fees equals sum of FEE_ and TAX_ line item amounts and final_premium adds total_fees after modifier calculation."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18208,
+    "title": "Verify decimal precision is maintained for all monetary values",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request and validate amount fields, base_premium, total_modifiers, total_fees, and final_premium precision.",
+        "expected": "All monetary fields preserve expected decimal precision and no binary floating point drift is visible."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Non Functional"
+    ]
+  },
+  {
+    "id": 18209,
+    "title": "Verify calculate supports Quote transaction type",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with transaction_type=Quote.",
+        "expected": "Response is 201 Created and transaction_type in response is Quote."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18210,
+    "title": "Verify calculate supports Endorsement transaction type",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with transaction_type=Endorsement.",
+        "expected": "Response is 201 Created and transaction_type in response is Endorsement."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18211,
+    "title": "Verify calculate supports Issuance transaction type",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with transaction_type=Issuance.",
+        "expected": "Response is 201 Created and transaction_type in response is Issuance."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18212,
+    "title": "Verify calculate supports Renewal transaction type",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with transaction_type=Renewal.",
+        "expected": "Response is 201 Created and transaction_type in response is Renewal."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18213,
+    "title": "Verify recalculate creates new result and supersedes prior result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Create initial result, then submit recalculate for the same policy and coverage.",
+        "expected": "Recalculate response is 201 Created with a new result_id; prior result is marked is_superseded=true and superseded_by_id points to new result."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18214,
+    "title": "Verify recalculate behaves like calculate when no prior result exists",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit recalculate request for a policy/coverage with no existing result.",
+        "expected": "Response is 201 Created, is_superseded=false, and no prior result update is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18215,
+    "title": "Verify full pricing history includes superseded and current results",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "After calculate and recalculate, call GET results by policy.",
+        "expected": "Response is 200 OK and includes both superseded and non-superseded results for the policy."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18216,
+    "title": "Verify latest endpoint returns only most recent non-superseded result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "After multiple calculations/recalculations for same policy and coverage, call latest endpoint.",
+        "expected": "Response is 200 OK and returns a single non-superseded result with latest result_id."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18217,
+    "title": "Verify trace endpoint returns complete audit trace for calculated result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call trace endpoint for a valid result_id created by calculate.",
+        "expected": "Response is 200 OK and contains original inputs, output snapshot, applied rule codes, execution time, and calculation metadata."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18218,
+    "title": "Verify trace remains accessible for superseded result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "After recalculate supersedes an earlier result, call trace endpoint using the superseded result_id.",
+        "expected": "Response is 200 OK; trace for superseded result is retained and accessible."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18219,
+    "title": "Verify unknown policy returns 200 with empty result array",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call GET results using a tenant-scoped policy_id that has no pricing results.",
+        "expected": "Response is 200 OK and body is an empty array []."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18220,
+    "title": "Verify unknown result trace returns 404",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call trace endpoint with a valid-format but non-existing result_id.",
+        "expected": "Response is 404 Not Found with trace/result not found problem detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18221,
+    "title": "Verify missing policy_id returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request without policy_id.",
+        "expected": "Response is 400 Bad Request and validation error identifies policy_id."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18222,
+    "title": "Verify policy_id exceeding maximum length returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with policy_id length greater than 200.",
+        "expected": "Response is 400 Bad Request and validation error identifies policy_id max length."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18223,
+    "title": "Verify missing coverage_code returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request without coverage_code.",
+        "expected": "Response is 400 Bad Request and validation error identifies coverage_code."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18224,
+    "title": "Verify invalid transaction_type returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with invalid transaction_type.",
+        "expected": "Response is 400 Bad Request and validation error identifies transaction_type."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18225,
+    "title": "Verify missing effective_date returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with missing or default effective_date.",
+        "expected": "Response is 400 Bad Request and validation error identifies effective_date."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18226,
+    "title": "Verify null pricing_inputs returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request with pricing_inputs=null.",
+        "expected": "Response is 400 Bad Request and validation error identifies pricing_inputs."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 18227,
+    "title": "Verify calculate without bearer token returns 401",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate request without Authorization header.",
+        "expected": "Response is 401 Unauthorized."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Security"
+    ]
+  },
+  {
+    "id": 18228,
+    "title": "Verify monitor-only token cannot calculate or recalculate",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate or recalculate request using a read/monitor-only token.",
+        "expected": "Response is 403 Forbidden and no pricing result is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Security"
+    ]
+  },
+  {
+    "id": 18229,
+    "title": "Verify tenant isolation for pricing result retrieval",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Create a pricing result under Tenant A, then attempt to retrieve the same policy_id using Tenant B token.",
+        "expected": "Response does not expose Tenant A results; expected body is empty array or not found according to API tenant-isolation contract."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Security"
+    ]
+  },
+  {
+    "id": 18230,
+    "title": "Verify rate limit exceeded returns 429 for calculate endpoint",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculate requests above configured rate-limit window.",
+        "expected": "Response is 429 Too Many Requests after configured threshold is exceeded and no duplicate result should be relied on."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Non Functional"
+    ]
+  }
+]

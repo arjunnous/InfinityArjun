@@ -1,0 +1,565 @@
+[
+  {
+    "id": 17401,
+    "title": "Verify valid custom field definition can be created",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /rulesengine/fields with parameterized valid CreateFieldDefinitionRequest.",
+        "expected": "Response is 201 Created; response includes generated id, tenant_id, field_code, display_name, data_type, scope, is_active=false, is_standard=false, and audit fields."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17402,
+    "title": "Verify field_code rejects invalid snake_case values",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields using parameterized invalid field_code variants: uppercase, starts with digit, contains hyphen, contains space, too short, or too long.",
+        "expected": "Each request returns 400 Bad Request with INVALID_FIELD_CODE or field-level  detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17403,
+    "title": "Verify Enum field requires allowed_values",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields with data_type=Enum and allowed_values omitted or null.",
+        "expected": "Response is 400 Bad Request with ENUM_REQUIRES_ALLOWED_VALUES or equivalent  detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17404,
+    "title": "Verify Enum field rejects invalid allowed_values JSON",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields with data_type=Enum and allowed_values={{invalidJsonOrNonArrayValue}}.",
+        "expected": "Response is 400 Bad Request with INVALID_ALLOWED_VALUES_JSON or equivalent  detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17405,
+    "title": "Verify field accepts valid _regex",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields with _regex={{validRegexPattern}}.",
+        "expected": "Response is 201 Created and response stores _regex value."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17406,
+    "title": "Verify field rejects invalid _regex",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields or PUT /fields/{id}/ with _regex={{invalidRegexPattern}}.",
+        "expected": "Response is 400 Bad Request with INVALID__REGEX or descriptive  detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17407,
+    "title": "Verify duplicate field_code for same tenant returns 409",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Create field {{validSnakeCaseFieldCode}}, then create another field with same field_code in same tenant.",
+        "expected": "Second request returns 409 Conflict with DUPLICATE_FIELD_CODE; no duplicate field is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "DataIntegrity",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17408,
+    "title": "Verify GET fields excludes inactive by default",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Create field, activate one field, leave another inactive, then send GET /fields without includeInactive.",
+        "expected": "Response is 200 OK and includes active fields only; inactive field is excluded."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17409,
+    "title": "Verify GET fields includeInactive returns inactive and active fields",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /fields?includeInactive=true.",
+        "expected": "Response is 200 OK and includes both active and inactive non-deleted fields for the tenant."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17410,
+    "title": "Verify GET custom fields returns only non-standard fields",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /rulesengine/fields/custom.",
+        "expected": "Response is 200 OK and every returned item has is_standard=false."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17411,
+    "title": "Verify GET field by id returns full field projection",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /fields/{{fieldId}}.",
+        "expected": "Response is 200 OK and includes all documented field attributes including , scoping, entity link, is_active, created_at, and created_by."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17412,
+    "title": "Verify GET field by unknown id returns 404",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /fields/{{unknownOrCrossTenantFieldId}}.",
+        "expected": "Response is 404 Not Found and does not expose cross-tenant data."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Security"
+    ]
+  },
+  {
+    "id": 17413,
+    "title": "Verify GET field by code returns matching field",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /fields/by-code/{{fieldCode}} for an existing field.",
+        "expected": "Response is 200 OK and field_code equals requested code."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17414,
+    "title": "Verify GET field by unknown code returns 404",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /fields/by-code/{{unknownFieldCode}}.",
+        "expected": "Response is 404 Not Found with FIELD_CODE_NOT_FOUND or equivalent detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Read"
+    ]
+  },
+  {
+    "id": 17415,
+    "title": "Verify update field  rules succeeds",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send PUT /fields/{{fieldId}}/ with parameterized is_required, default_value, allowed_values, or _regex per schema.",
+        "expected": "Response is 200 OK; subsequent GET shows updated  settings; data_model_change_logs contains update entry."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Update"
+    ]
+  },
+  {
+    "id": 17416,
+    "title": "Verify activate inactive field succeeds",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields/{{inactiveFieldId}}/activate.",
+        "expected": "Response is 200 OK; subsequent GET shows is_active=true and change log is recorded."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Lifecycle"
+    ]
+  },
+  {
+    "id": 17417,
+    "title": "Verify activating already active field is blocked",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields/{{activeFieldId}}/activate.",
+        "expected": "Response is 422 Unprocessable Entity with FIELD_ALREADY_ACTIVE or equivalent detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Lifecycle",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17418,
+    "title": "Verify deactivation impact check returns referencing rule codes",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /fields/{{fieldIdReferencedByActiveRule}}/impact.",
+        "expected": "Response is 200 OK and affected_rule_codes contains the expected parameterized rule code list; if no references exist, response returns an empty array with 200."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Impact",
+      "Read"
+    ]
+  },
+  {
+    "id": 17419,
+    "title": "Verify deactivate active field succeeds after impact review",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "After impact endpoint is reviewed, send POST /fields/{{activeFieldId}}/deactivate.",
+        "expected": "Response is 200 OK; subsequent GET with includeInactive shows is_active=false and change log captures impact summary."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Lifecycle"
+    ]
+  },
+  {
+    "id": 17420,
+    "title": "Verify deactivating already inactive field is blocked",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /fields/{{inactiveFieldId}}/deactivate.",
+        "expected": "Response is 422 Unprocessable Entity with FIELD_ALREADY_INACTIVE or equivalent detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Lifecycle",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17421,
+    "title": "Verify valid custom entity can be created",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /rulesengine/entities with valid parameterized entity request.",
+        "expected": "Response is 201 Created with generated id, entity_code, display_name, product/lob scope, is_active=false, and audit fields."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Entity",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17422,
+    "title": "Verify entity_code rejects invalid snake_case values",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /entities using invalid entity_code variants from test data.",
+        "expected": "Each request returns 400 Bad Request with entity_code  detail."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17423,
+    "title": "Verify duplicate entity_code for same tenant returns 409",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Create entity {{entityCode}}, then create another entity with same code in same tenant.",
+        "expected": "Second request returns 409 Conflict with DUPLICATE_ENTITY_CODE; no duplicate entity is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "DataIntegrity",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17424,
+    "title": "Verify GET entities returns tenant-scoped entities",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /rulesengine/entities.",
+        "expected": "Response is 200 OK and includes only current tenant entities, excluding soft-deleted records."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Entity",
+      "Read"
+    ]
+  },
+  {
+    "id": 17425,
+    "title": "Verify GET entity by id includes linked fields",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Create entity, create field linked by custom_entity_id, then send GET /entities/{{entityId}}.",
+        "expected": "Response is 200 OK and linked fields collection includes the parameterized field_code."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Entity",
+      "Read"
+    ]
+  },
+  {
+    "id": 17426,
+    "title": "Verify entity activation succeeds when eligible",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Ensure entity has required linked field if implementation enforces it, then send POST /entities/{{inactiveEntityId}}/activate.",
+        "expected": "Response is 200 OK and subsequent GET shows is_active=true."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Lifecycle"
+    ]
+  },
+  {
+    "id": 17427,
+    "title": "Verify entity deactivation succeeds from active state",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /entities/{{activeEntityId}}/deactivate.",
+        "expected": "Response is 200 OK and subsequent GET shows is_active=false."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Lifecycle"
+    ]
+  },
+  {
+    "id": 17428,
+    "title": "Verify missing token returns 401 for field and entity endpoints",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute representative field and entity read/write endpoints without Authorization header.",
+        "expected": "Each request returns 401 Unauthorized and no mutation occurs."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Security"
+    ]
+  },
+  {
+    "id": 17429,
+    "title": "Verify wrong role returns 403 for field and entity endpoints",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call mutation endpoint with monitor-only token and read endpoint with manage-only or invalid scoped token as applicable to implementation.",
+        "expected": "Response is 403 Forbidden for insufficient policy; resource remains unchanged."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Security"
+    ]
+  },
+  {
+    "id": 17430,
+    "title": "Verify all data model mutations create audit log entries",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Perform field create,  update, activate/deactivate, entity create, activate/deactivate and verify audit log through API/DB-approved observation path.",
+        "expected": "Each mutation has a corresponding change log with tenant_id, change_type, subject_id, subject_code, changed_by, changed_at, change_description, and affected_rule_codes where applicable."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Audit",
+      "Functional"
+    ]
+  }
+]

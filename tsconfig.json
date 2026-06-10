@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*":    ["src/ui/pages/*"],
+      "@helpers/*":  ["src/core/utils/*"],
+      "@utils/*":    ["src/core/utils/*"],
+      "@fixtures/*": ["src/core/fixtures/*"],
+      "@services/*": ["src/api/clients/*"],
+
+      "@validators/*": ["src/core/validators/*"],
+      "@core/*":     ["src/core/*"],
+      "@api/*":      ["src/api/*"],
+      "@ui/*":       ["src/ui/*"],
+      "@db/*":       ["src/db/*"],
+      "@config/*":   ["src/config/*"]
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "ts-node": {
+    "esm": false,
+    "transpileOnly": true
+  }
+}

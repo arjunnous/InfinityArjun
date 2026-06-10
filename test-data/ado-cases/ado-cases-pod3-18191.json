@@ -1,0 +1,464 @@
+[
+  {
+    "id": 19492,
+    "title": "Verify synchronous rule execution returns 200 OK with complete response contract for valid CA BusinessValidation request",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /api/v1/rulesengine/execute with valid CA BusinessValidation payload.", "expected": "200 OK. Body contains execution_id, aggregated_outcome, total_rules_evaluated, total_rules_fired, total_latency_ms, halted_on_block, is_dry_run, executed_at." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "RuleExecution", "HappyPath"]
+  },
+  {
+    "id": 19493,
+    "title": "Verify response is returned in the same HTTP call without polling — total_latency_ms is within p99 budget",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /api/v1/rulesengine/execute and measure total_latency_ms in response.", "expected": "200 OK. total_latency_ms < 500. No polling required — response is synchronous." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Performance", "AC-3.1-001"]
+  },
+  {
+    "id": 19494,
+    "title": "Verify only rules matching requested ExecutionPhase are evaluated — other phase rules are excluded",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with execution_phase=OccurrenceRating. Check that only OccurrenceRating rules are in rule_results.", "expected": "200 OK. Rules from other phases are not evaluated. AC-3.1-002." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "PhaseFiltering", "AC-3.1-002"]
+  },
+  {
+    "id": 19495,
+    "title": "Verify Batch-only rules (allowed_mode=Batch) are skipped on sync execution path — RealTime and Both rules are evaluated",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute synchronously. Verify allowed_mode=Batch rules are not in rule_results.", "expected": "200 OK. Batch-mode rules excluded. AC-3.1-002." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "BatchFilter", "AC-3.1-002"]
+  },
+  {
+    "id": 19496,
+    "title": "Verify effective_date resolves correct rules — rules with effective_to before effective_date are excluded",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with effective_date beyond some rules' effective_to. Those rules must not fire.", "expected": "200 OK. Expired rules are excluded from evaluation." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "DateFiltering"]
+  },
+  {
+    "id": 19497,
+    "title": "Verify jurisdiction_code scopes rule evaluation — CA-scoped rules do not fire for TX submission",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with jurisdiction_code=TX. CA-scoped rules must not fire.", "expected": "200 OK. Jurisdiction filtering applied. CA rules excluded for TX." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "JurisdictionFilter"]
+  },
+  {
+    "id": 19498,
+    "title": "Verify halt_on_first_block=true stops evaluation after first Block outcome and sets halted_on_block=true",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with halt_on_first_block=true and input that triggers Block.", "expected": "200 OK. halted_on_block=true. aggregated_outcome=Block. Only first blocking rule in rule_results. AC-3.1-003." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "HaltOnFirstBlock", "AC-3.1-003"]
+  },
+  {
+    "id": 19499,
+    "title": "Verify halt_on_first_block=false continues evaluation through all rules even when Block outcome is encountered",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with halt_on_first_block=false and blocking input.", "expected": "200 OK. halted_on_block=false. All applicable rules evaluated. AC-3.1-003." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "HaltOnFirstBlock", "AC-3.1-003"]
+  },
+  {
+    "id": 19500,
+    "title": "Verify halt_on_first_block=true with Decline outcome stops evaluation and reports Decline as aggregated_outcome",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with halt_on_first_block=true and input that triggers Decline rule.", "expected": "200 OK. halted_on_block=true. aggregated_outcome=Decline." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "HaltOnFirstBlock", "Decline"]
+  },
+  {
+    "id": 19501,
+    "title": "Verify is_dry_run=true returns full evaluation result without inserting any DB row",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with is_dry_run=true.", "expected": "200 OK. is_dry_run=true echoed. Full rule_results returned. No DB row inserted. AC-3.1-004." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "DryRun", "AC-3.1-004"]
+  },
+  {
+    "id": 19502,
+    "title": "Verify is_dry_run=false persists execution result row to DB for audit",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with is_dry_run=false.", "expected": "200 OK. is_dry_run=false echoed. Execution record persisted. execution_id can be used for audit lookup." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "DryRun", "AC-3.1-004"]
+  },
+  {
+    "id": 19503,
+    "title": "Verify aggregated_outcome reflects worst severity — single Decline overrides all Allow and Warn outcomes",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with input triggering a Decline rule alongside Allow rules.", "expected": "200 OK. aggregated_outcome=Decline. AC-3.1-005 severity: Allow<Warn<Block<Decline." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Severity", "AC-3.1-005"]
+  },
+  {
+    "id": 19504,
+    "title": "Verify aggregated_outcome=Block when Block is the worst severity and no Decline rule fires",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with input triggering Block but no Decline.", "expected": "200 OK. aggregated_outcome=Block." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Severity", "AC-3.1-005"]
+  },
+  {
+    "id": 19505,
+    "title": "Verify aggregated_outcome=Allow when all fired rules produce Allow outcome",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with valid passing input where all rules return Allow.", "expected": "200 OK. aggregated_outcome=Allow." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Severity", "AC-3.1-005"]
+  },
+  {
+    "id": 19506,
+    "title": "Verify rate limit of 100 requests per minute per tenant returns 429 when exceeded",
+    "state": "Ready",
+    "steps": [
+      { "action": "Send >100 POST /execute requests within 60s from same tenant JWT.", "expected": "429 Too Many Requests returned by rate limiter named 'rules-api'. AC-3.1-006." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "RateLimit", "AC-3.1-006"]
+  },
+  {
+    "id": 19507,
+    "title": "Verify SystemId and SystemName from M2M JWT claims are captured in execution audit trail",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with M2M client_credentials JWT containing SystemId and SystemName claims.", "expected": "200 OK. Execution audit row captures SystemId and SystemName. AC-3.1-007." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "M2M", "AC-3.1-007"]
+  },
+  {
+    "id": 19508,
+    "title": "Verify TenantId is read from JWT User.Claims only — body tenant_id field is silently ignored",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with a different tenant_id in the request body than the JWT claim.", "expected": "200 OK. Engine uses JWT tenant, not body value. AC-3.1-008." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "TenantIsolation", "AC-3.1-008"]
+  },
+  {
+    "id": 19509,
+    "title": "Verify tenant isolation — one tenant cannot access or influence another tenant's rule evaluation",
+    "state": "Ready",
+    "steps": [
+      { "action": "Execute with Tenant A JWT. Verify Tenant B rules are not evaluated.", "expected": "200 OK. Only Tenant A rules evaluated. AC-3.1-008." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "TenantIsolation", "AC-3.1-008"]
+  },
+  {
+    "id": 19510,
+    "title": "Verify missing phase field returns 422 Unprocessable Entity with FluentValidation error",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute without execution_phase field.", "expected": "422 Unprocessable Entity. FluentValidation error on phase field." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19511,
+    "title": "Verify invalid phase enum value returns 422 Unprocessable Entity",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with execution_phase='INVALID_PHASE_XYZ'.", "expected": "422 Unprocessable Entity. IsInEnum(ExecutionPhase) validation fails." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19512,
+    "title": "Verify missing policy_id returns 422 Unprocessable Entity",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute without policy_id field.", "expected": "422 Unprocessable Entity. NotEmpty validation on policy_id." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19513,
+    "title": "Verify missing transaction_id returns 422 Unprocessable Entity",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute without transaction_id field.", "expected": "422 Unprocessable Entity. NotEmpty validation on transaction_id." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19514,
+    "title": "Verify missing effective_date returns 422 Unprocessable Entity",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute without effective_date field.", "expected": "422 Unprocessable Entity. NotEqual(default) validation on effective_date." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19515,
+    "title": "Verify null input_data returns 422 Unprocessable Entity",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with input_data: null.", "expected": "422 Unprocessable Entity. NotNull validation on input_data." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19516,
+    "title": "Verify jurisdiction_code exceeding 10 characters returns 422 Unprocessable Entity",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with jurisdiction_code='TOOLONGCODE' (11 chars).", "expected": "422 Unprocessable Entity. MaxLength(10) validation fails." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19517,
+    "title": "Verify effective_date in DateTime format (with time component) returns 422 parse error",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with effective_date='2026-05-28T00:00:00Z' (DateTime, not DateOnly).", "expected": "422 Unprocessable Entity. DateOnly parse fails on DateTime string." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "422"]
+  },
+  {
+    "id": 19518,
+    "title": "Verify missing Authorization header returns 401 Unauthorized",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute without Authorization header.", "expected": "401 Unauthorized. JWT middleware rejects unauthenticated call." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Security", "401"]
+  },
+  {
+    "id": 19519,
+    "title": "Verify token with rule.readonly policy returns 403 Forbidden — rule.execute is required",
+    "state": "Ready",
+    "steps": [
+      { "action": "POST /execute with JWT containing rule.readonly but not rule.execute policy.", "expected": "403 Forbidden. Policy gate rejects insufficient scope." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Security", "403"]
+  },
+  {
+    "id": 19520,
+    "title": "Verify GET /api/v1/rulesengine/integration/health returns 200 OK without any authentication token",
+    "state": "Ready",
+    "steps": [
+      { "action": "GET /api/v1/rulesengine/integration/health without Authorization header.", "expected": "200 OK. AllowAnonymous — no token required. Liveness check." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Operational", "Health"]
+  },
+  {
+    "id": 19521,
+    "title": "Verify GET /api/v1/rulesengine/integration/info returns 200 OK without any authentication token",
+    "state": "Ready",
+    "steps": [
+      { "action": "GET /api/v1/rulesengine/integration/info without Authorization header.", "expected": "200 OK. AllowAnonymous — integration metadata accessible without auth." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Operational", "IntegrationInfo"]
+  },
+  {
+    "id": 19522,
+    "title": "Verify GET /api/v1/rulesengine/info returns tenant-scoped active rule count with valid rule.readonly token",
+    "state": "Ready",
+    "steps": [
+      { "action": "GET /api/v1/rulesengine/info with rule.readonly JWT.", "expected": "200 OK. Body contains active_rule_count scoped to authenticated tenant." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Operational", "EngineInfo"]
+  },
+  {
+    "id": 19523,
+    "title": "Verify GET /api/v1/rulesengine/info returns 401 Unauthorized when no token is provided",
+    "state": "Ready",
+    "steps": [
+      { "action": "GET /api/v1/rulesengine/info without Authorization header.", "expected": "401 Unauthorized. JWT middleware rejects unauthenticated request to protected endpoint." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Security", "401"]
+  },
+  {
+    "id": 19660,
+    "title": "Verify empty request body returns 400 Bad Request — all required fields absent triggers validation error",
+    "state": "Ready",
+    "steps": [
+      { "action": "Send POST /api/v1/rulesengine/execute with Content-Type: application/json and empty body {}.", "expected": "400 Bad Request or 422 Unprocessable Entity. Error body identifies missing required fields." },
+      { "action": "Inspect response body for validation error details.", "expected": "No execution_id returned. Error message references required fields (policy_id, transaction_id, execution_phase, effective_date, input_data)." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "Negative", "EmptyBody"]
+  },
+  {
+    "id": 19661,
+    "title": "Verify missing tenant_id field in request body returns 400 or 422 Unprocessable Entity",
+    "state": "Ready",
+    "steps": [
+      { "action": "Build a valid execute payload with all required fields, then remove tenant_id. Send POST /api/v1/rulesengine/execute.", "expected": "400 Bad Request or 422 Unprocessable Entity. Error references tenant_id as missing." },
+      { "action": "Confirm no execution_id is returned.", "expected": "No rule evaluation occurs. No execution_id in response." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "Negative", "MissingField"]
+  },
+  {
+    "id": 19662,
+    "title": "Verify invalid tenant_id value ('abc') returns 400 Bad Request — UUID format validation fails",
+    "state": "Ready",
+    "steps": [
+      { "action": "Build a valid execute payload. Set tenant_id to string 'abc'. Send POST /api/v1/rulesengine/execute.", "expected": "400 Bad Request. Model binding fails — 'abc' is not a valid UUID (Guid)." },
+      { "action": "Inspect error response body.", "expected": "Error references tenant_id field and UUID format requirement. No execution_id returned." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "Negative", "InvalidUUID"]
+  },
+  {
+    "id": 19663,
+    "title": "Verify invalid transaction_id value ('abc') returns 400 Bad Request — UUID format validation fails",
+    "state": "Ready",
+    "steps": [
+      { "action": "Build a valid execute payload. Set transaction_id to string 'abc'. Send POST /api/v1/rulesengine/execute.", "expected": "400 Bad Request. Model binding fails — 'abc' is not a valid UUID (Guid)." },
+      { "action": "Inspect error response body.", "expected": "Error references transaction_id field. No execution_id returned." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "Negative", "InvalidUUID"]
+  },
+  {
+    "id": 19664,
+    "title": "Verify string value 'false' for boolean field is_dry_run returns 400 Bad Request — type mismatch",
+    "state": "Ready",
+    "steps": [
+      { "action": "Build a valid execute payload. Set is_dry_run to string 'false' instead of boolean false. Send POST /api/v1/rulesengine/execute.", "expected": "400 Bad Request. ASP.NET Core model binding rejects string type for a boolean field." },
+      { "action": "Confirm no execution_id returned and no rule evaluation occurs.", "expected": "Error response references is_dry_run field type mismatch. No execution result produced." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "Negative", "TypeMismatch", "Boolean"]
+  },
+  {
+    "id": 19665,
+    "title": "Verify extra unknown root-level field (transaction_type: 'Quote') is silently ignored or returns 400 Bad Request",
+    "state": "Ready",
+    "steps": [
+      { "action": "Build a fully valid execute payload. Add extra field transaction_type: 'Quote' at root level. Send POST /api/v1/rulesengine/execute.", "expected": "200 OK (extra field silently ignored — lenient deserialization) OR 400 Bad Request (strict deserialization enabled)." },
+      { "action": "If 200 OK: verify execution_id present and extra field not echoed. If 400: verify error references unknown property.", "expected": "Behavior is consistent. Document whether API is lenient or strict. Extra field has no effect on rule evaluation result." }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": ["API", "Validation", "Negative", "ExtraField"]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "comment": "Explicit TC tag → ADO work-item ID map for Suite 18181 (Plan 18163 — US-4.3 Flexible Data Model Support). Used by fixtures/tc-fixture.ts as highest-priority lookup when ADO titles lack [TC-x.x-xxx] prefixes.",
+  "suiteId": "18181",
+  "planId":  "18163",
+  "map": {
+    "TC-4.3-001":     17401,
+    "TC-4.3-002":     17404,
+    "TC-4.3-003":     17403,
+    "TC-4.3-004a":    17402,
+    "TC-4.3-004b":    17402,
+    "TC-4.3-004c":    17402,
+    "TC-4.3-005":     17416,
+    "TC-4.3-006":     17418,
+    "TC-4.3-007a":    17421,
+    "TC-4.3-007b":    17421,
+    "TC-4.3-007c":    17425,
+    "TC-4.3-008":     17407,
+    "TC-4.3-009":     17410,
+    "TC-4.3-Auth-01": 17428,
+    "TC-4.3-Auth-02": 17428,
+    "TC-4.3-Auth-03": 17429,
+    "TC-4.3-Auth-04": 17429,
+    "TC-4.3-Auth-05": 17429
+  }
+}

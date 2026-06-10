@@ -1,0 +1,19 @@
+# Test artifacts
+playwright-report/
+test-results/
+allure-results/
+allure-report/
+reports/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+
+# Build outputs
+dist/
+
+# OS
+.DS_Store
+Thumbs.db

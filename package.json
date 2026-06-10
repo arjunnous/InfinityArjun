@@ -1,0 +1,34 @@
+{
+  "name": "insurity-automation",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "playwright test",
+    "test:qa": "cross-env TEST_ENV=qa playwright test",
+    "test:staging": "cross-env TEST_ENV=staging playwright test",
+    "test:pod3": "playwright test --project=pod3-rules",
+    "test:pod3:qa": "cross-env TEST_ENV=qa playwright test --project=pod3-rules",
+    "test:pod3:staging": "cross-env TEST_ENV=staging playwright test --project=pod3-rules",
+    "test:smoke": "playwright test --project=smoke",
+    "test:smoke:qa": "cross-env TEST_ENV=qa playwright test --project=smoke",
+    "test:smoke:staging": "cross-env TEST_ENV=staging playwright test --project=smoke",
+    "report": "playwright show-report playwright-report",
+"fetch:testcases": "ts-node integrations/ado/scripts/fetch-testcases.ts",
+    "push:results": "ts-node integrations/ado/scripts/push-from-report.ts",
+    "push:report": "ts-node integrations/ado/scripts/push-from-report.ts",
+    "encrypt:creds": "ts-node scripts/encrypt-credentials.ts"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.0",
+    "@playwright/test": "^1.44.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/pg": "^8.11.0",
+    "azure-devops-node-api": "^12.5.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.0",
+    "js-yaml": "^4.1.0",
+    "pg": "^8.11.0",
+    "simple-git": "^3.24.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.4.0"
+  }
+}

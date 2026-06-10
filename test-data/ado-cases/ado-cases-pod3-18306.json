@@ -1,0 +1,542 @@
+[
+  {
+    "id": 17694,
+    "title": "Verify valid occurrence premium calculation returns persisted result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit a valid occurrence calculation request using active rate plan and generated IDs.",
+        "expected": "201 Created; response includes result_id, occurrence_id, policy_id, base_rate, calculated_premium, factors_applied, calculation_trace, created_at, is_dry_run=false, is_superseded=false."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17695,
+    "title": "Verify dry-run calculation does not persist result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit dry-run request, then attempt GET by returned result_id.",
+        "expected": "201 Created with full result and is_dry_run=true; GET by result_id returns 404 or no persisted DB row."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17696,
+    "title": "Verify invalid state code length is rejected",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculation with full state name or invalid state code length.",
+        "expected": "400/422 validation error identifying state_code; no result persisted."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17697,
+    "title": "Verify expiration before effective date is rejected",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit invalid date range.",
+        "expected": "400/422 validation error; no result persisted."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17698,
+    "title": "Verify base exposure must be positive",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit request with zero and negative exposure variants.",
+        "expected": "400/422 validation error for base_exposure."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17699,
+    "title": "Verify required identifiers are validated",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit each missing required identifier variant.",
+        "expected": "400/422 validation error identifies missing field; no result persisted."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17700,
+    "title": "Verify rate plan version must be active/resolvable",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculation with inactive/unknown rate_plan_version_id.",
+        "expected": "400/404/422 per Swagger contract; no rating result is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17701,
+    "title": "Verify factor application order is traceable",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculation and inspect factors_applied applied_order and calculation_trace.",
+        "expected": "factors_applied order matches configured factor order; trace shows each factor application step."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17702,
+    "title": "Verify pro-rata calculation for endorsement",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit endorsement calculation with transaction_end_date.",
+        "expected": "201 Created; prorated_factor and prorated_premium are populated and equal calculated_premium * factor within rounding precision."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17703,
+    "title": "Verify cancellation pro-rata calculation",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit cancellation request with valid transaction_end_date.",
+        "expected": "201 Created; prorated fields populated; trace includes pro-rata step."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17704,
+    "title": "Verify transaction_end_date outside term is rejected",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit invalid transaction_end_date variants.",
+        "expected": "400/422 validation error; no result persisted."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17705,
+    "title": "Verify leap-year denominator in occurrence result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculation for leap-year term.",
+        "expected": "year_denominator=366, spans_leap_day=true, term_days reflects date range."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17706,
+    "title": "Verify minimum premium floor is enforced",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit request with low exposure or configured floor scenario.",
+        "expected": "calculated_premium equals configured minimum floor; trace includes minimum premium floor step."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17707,
+    "title": "Verify final rounding is to two decimal places",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit calculation and inspect calculated_premium/prorated_premium.",
+        "expected": "Monetary fields round consistently to 2 decimals per configured method; no floating-point drift."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17708,
+    "title": "Verify recalculation supersedes prior result",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Create initial result, call recalculate with changed exposure, then retrieve prior result.",
+        "expected": "Recalculate returns 201 with new result_id; prior result is_superseded=true and superseded_by_id=new result_id."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17709,
+    "title": "Verify get result by resultId",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Retrieve persisted occurrence result.",
+        "expected": "200 OK; response result_id matches; includes factors_applied and calculation_trace."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17710,
+    "title": "Verify get by transactionId",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Retrieve result by transaction_id.",
+        "expected": "200 OK; response transaction_id matches and premium fields are present."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17711,
+    "title": "Verify get all results by policyId includes history",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Retrieve policy premium history.",
+        "expected": "200 OK; response array contains all matching occurrence results for tenant/policy, including superseded when applicable."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17712,
+    "title": "Verify rating.execute token cannot read monitor endpoints",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Call GET using rating.execute-only token.",
+        "expected": "403 Forbidden."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17713,
+    "title": "Verify no token on calculate is unauthorized",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Submit valid request without token.",
+        "expected": "401 Unauthorized; no result persisted."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17714,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 21",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17715,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 22",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17716,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 23",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17717,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 24",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17718,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 25",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17719,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 26",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17720,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 27",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17721,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 28",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17722,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 29",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17723,
+    "title": "Verify occurrence premium auditability and environment-neutral execution scenario 30",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Execute the scenario using parameterized data and verify response, trace/audit evidence, and no cross-tenant leakage.",
+        "expected": "Response follows API contract; required audit/trace fields are present; no hardcoded host or fixed test data dependency is required."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "2",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  }
+]

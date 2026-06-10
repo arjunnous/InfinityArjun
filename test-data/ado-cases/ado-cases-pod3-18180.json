@@ -1,0 +1,426 @@
+[
+  {
+    "id": 17370,
+    "title": "Verify Active rule can be deployed to Development environment",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {activeRuleId} with environment parameter set to Development and parameterized change description.",
+        "expected": "Response is 202 Accepted; response body contains deployment_id, rule_id, rule_code, version_number, environment=Development, deployed_at UTC, and deployed_by; deployment log is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17371,
+    "title": "Verify Active rule can be deployed to Staging environment",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {activeRuleId} with environment parameter set to Staging and parameterized change description.",
+        "expected": "Response is 202 Accepted; response body contains deployment_id, rule_id, rule_code, version_number, environment=Staging, deployed_at UTC, and deployed_by; deployment log is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17372,
+    "title": "Verify Active rule can be deployed to UAT environment",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {activeRuleId} with environment parameter set to UAT and parameterized change description.",
+        "expected": "Response is 202 Accepted; response body contains deployment_id, rule_id, rule_code, version_number, environment=UAT, deployed_at UTC, and deployed_by; deployment log is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17373,
+    "title": "Verify Active rule can be deployed to Production environment",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {activeRuleId} with environment parameter set to Production and parameterized change description.",
+        "expected": "Response is 202 Accepted; response body contains deployment_id, rule_id, rule_code, version_number, environment=Production, deployed_at UTC, and deployed_by; deployment log is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional"
+    ]
+  },
+  {
+    "id": 17374,
+    "title": "Verify deployment of Draft rule is blocked",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {{draftRuleId}}.",
+        "expected": "Response is 422 Unprocessable Entity; no deployment log entry is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17375,
+    "title": "Verify deployment of PendingApproval rule is blocked",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {{pendingApprovalRuleId}}.",
+        "expected": "Response is 422 Unprocessable Entity; deployment history remains unchanged."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17376,
+    "title": "Verify deployment of Approved but not Active rule is blocked",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {{approvedRuleId}} before activation.",
+        "expected": "Response is 422 Unprocessable Entity; no log is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17377,
+    "title": "Verify deployment of Inactive rule is blocked",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {{inactiveRuleId}}.",
+        "expected": "Response is 422 Unprocessable Entity and no log entry is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17378,
+    "title": "Verify deployment of Retired rule is blocked",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy for {{retiredRuleId}}.",
+        "expected": "Response is 422 Unprocessable Entity; deployment log count is unchanged."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17379,
+    "title": "Verify duplicate deployment same rule/version/environment returns conflict",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Deploy {{activeRuleId}} version {{versionNumber}} to {{environment}}, then repeat the same request.",
+        "expected": "Second request returns 409 Conflict with existing deployment reference; no duplicate log entry is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "DataIntegrity",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17380,
+    "title": "Verify same rule new version can deploy to same environment",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Deploy version {{versionNumber}} to {{environment}}, create/activate a new version through setup, then deploy {{newVersionNumber}} to same environment.",
+        "expected": "Response for new version is 202 Accepted and a separate deployment log exists with new version_number."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Versioning"
+    ]
+  },
+  {
+    "id": 17381,
+    "title": "Verify invalid environment value returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy with environment={{invalidEnvironmentValue}}.",
+        "expected": "Response is 400 Bad Request with environment validation error; no log entry is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17382,
+    "title": "Verify empty change_description returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy with blank change_description.",
+        "expected": "Response is 400 Bad Request with change_description validation error."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17383,
+    "title": "Verify change_description exceeding max length returns 400",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "<P>Send POST /deploy with {{changeDescriptionMoreThan1000Chars}} generated by test data.</P>",
+        "expected": "Response is 400 Bad Request with MaxLength validation error; no log is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative"
+    ]
+  },
+  {
+    "id": 17384,
+    "title": "Verify missing token on deploy returns 401",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy without Authorization header.",
+        "expected": "Response is 401 Unauthorized and no mutation occurs."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Security"
+    ]
+  },
+  {
+    "id": 17385,
+    "title": "Verify monitor-only token cannot deploy",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send POST /deploy using token with rule.monitor only.",
+        "expected": "Response is 403 Forbidden and no deployment log is created."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Security"
+    ]
+  },
+  {
+    "id": 17386,
+    "title": "Verify get deployment history for rule returns sorted results",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET deployments for {{ruleId}} after creating multiple deployments across versions/environments.",
+        "expected": "Response is 200 OK; all entries belong to requested rule and are sorted newest to oldest."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17387,
+    "title": "Verify deployment history supports environment filter",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "<P>Send GET /rules/deployments?environment={{validEnvironment}}.</P>",
+        "expected": "Response is 200 OK and every returned entry has matching environment."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17388,
+    "title": "Verify get all deployments returns paginated response",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET all deployments with parameterized page and page_size.",
+        "expected": "Response is 200 OK with requested page window and accurate total_count or  metadata per contract."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17389,
+    "title": "Verify get all deployments supports page 2",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Seed more records than page_size, then request page={{secondPageNumber}} and page_size={{pageSize}}.",
+        "expected": "Response is 200 OK; records do not duplicate page 1 and metadata reflects full result count."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Read"
+    ]
+  },
+  {
+    "id": 17390,
+    "title": "Verify get all deployments filters by environment",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /rulesengine/deployments?environment={{validEnvironment}}.",
+        "expected": "Response is 200 OK and all entries have matching environment."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17391,
+    "title": "Verify get all deployments filters by rule_id",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET /rulesengine/deployments?rule_id={{ruleId}}.",
+        "expected": "Response is 200 OK and all returned entries match requested rule_id."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Functional",
+      "Read"
+    ]
+  },
+  {
+    "id": 17392,
+    "title": "Verify missing token on read deployments returns 401",
+    "state": "Ready",
+    "steps": [
+      {
+        "action": "Send GET rule deployments and GET all deployments without Authorization header.",
+        "expected": "Each request returns 401 Unauthorized."
+      }
+    ],
+    "automationStatus": "Not Automated",
+    "priority": "1",
+    "areaPath": "Insurity EAIS AIDLC\\POD3",
+    "tags": [
+      "API",
+      "Negative",
+      "Security"
+    ]
+  }
+]
